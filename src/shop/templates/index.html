@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block title %}
+TeaShop
+{% endblock %}
+
+{% block content %}
+{% for tea in teas %}
+<article class="media content-section">
+    <img class="rounded-circle article-img" src="{{ tea.image.url }}" alt="">
+    <div class="media-body">
+        <div class="article-metadata">
+            <a class="mr-2"
+               href="{% url 'shop:current_tea_list_url' pk=tea.type.pk %}">{{ tea.type.title }}</a>
+            <small class="text-muted"></small>
+        </div>
+        <h2><a class="article-title" href="{% url 'shop:tea_detail_url' pk=tea.pk %}">{{ tea.name }}</a>
+        </h2>
+        <p class="article-content">{{ tea.description }}</p>
+    </div>
+</article>
+{% endfor %}
+{% if is_paginated %}
+
+{% if page_obj.has_previous %}
+<a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+<a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+{% endif %}
+
+{% for num in page_obj.paginator.page_range %}
+{% if page_obj.number == num %}
+<a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+{% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+<a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+{% endif %}
+
+{% endfor %}
+{% if page_obj.has_next %}
+<a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
+<a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+{% endif %}
+
+{% endif %}
+
+{% endblock %}
+
+{% block sidebar_content %}
+<h3>Tea Types</h3>
+<p class='text-muted'>
+<ul class="list-group">
+
+    {% for type in types %}
+    <a href="{% url " shop:current_tea_list_url" pk=type.id %}"
+    class="list-group-item list-group-item-light">{{ type }}</a>
+    {% endfor %}
+
+</ul>
+</p>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Basket
+{% endblock %}
+
+{% block content %}
+<h1>Your shopping basket</h1>
+<table class="table">
+    <thead class="thead-light">
+    <tr>
+        <th>Image</th>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Remove</th>
+        <th>Unit price</th>
+        <th>Price</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for item in basket %}
+    {% with product=item.product %}
+    <tr>
+        <td>
+        </td>
+        <td>{{ product.name }}</td>
+        <td>{{ item.count }}</td>
+        <td><a href="{% url " basket:basket_remove_url" product.id %}">Remove</a></td>
+        <td class="num">${{ item.price }}</td>
+        <td class="num">${{ item.total_price }}</td>
+    </tr>
+    {% endwith %}
+    {% endfor %}
+    <tr class="total">
+        <td>Total</td>
+        <td colspan="4"></td>
+        <td class="num">${{ basket.get_total_price }}</td>
+    </tr>
+    </tbody>
+</table>
+<p class="text-right">
+    <a href="{% url " shop:tea_list_url" %}" class="btn btn-primary">Continue shopping</a>
+    <a href="{% url 'orders:order_create_url' %}" class="btn btn-success">Checkout</a>
+</p>
+{% endblock %}
